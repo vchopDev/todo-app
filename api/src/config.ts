@@ -1,3 +1,5 @@
+import { join } from "path";
+
 export const config = () => ({
     database: {
         type: 'mysql',
@@ -7,7 +9,7 @@ export const config = () => ({
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
         entities: [
-            __dirname + '/../**/*.entity{.ts,.js}',
+            join(__dirname, '**', '*.entity{.ts,.js}')
         ],
         synchronize: true,
     }

@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { config } from './config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfig } from './databse.config';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { DatabaseConfig } from './databse.config';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useClass: DatabaseConfig
-    })
+    }),
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
