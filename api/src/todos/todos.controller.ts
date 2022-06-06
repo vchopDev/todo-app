@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
@@ -14,6 +14,12 @@ export class TodosController {
   @Post()
   async create(@Body() createTodoDto: CreateTodoDto) {
     const user = await this.userService.findById(createTodoDto.userId);
+    if(!user) {
+      throw new HttpException({
+        status: HttpStatus.BAD_REQUEST,
+        error: APIMESSAGES.TODO_CREATED_FAIL_USER_NOT_FOUND
+      }, HttpStatus.BAD_REQUEST)
+    }
     const result = await this.todosService.create(createTodoDto, user);
     return {
       message: APIMESSAGES.TODO_CREATED_SUCCESS,
