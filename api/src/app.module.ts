@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfig } from './databse.config';
 import { UsersModule } from './users/users.module';
 import { TodosModule } from './todos/todos.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { TodosModule } from './todos/todos.module';
       useClass: DatabaseConfig
     }),
     UsersModule,
-    TodosModule
+    TodosModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

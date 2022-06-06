@@ -16,7 +16,6 @@ export class UsersService {
     user.firstName = createUserDto.firstName;
     user.lastName = createUserDto.lastName;
     user.email = createUserDto.email;
-    //TODO: validate password against confirmPassword
     user.password = createUserDto.firstName;
     user.createdAt = user.updatedAt = new Date();
     return await user.save();
@@ -33,7 +32,7 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
-    return await this.userRepository.find({
+    return await this.userRepository.findOne({
       where: {email: email}
     })
   }
