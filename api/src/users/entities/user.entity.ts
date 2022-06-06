@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert } from "typeorm";
-import * as crypto from "crypto";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BaseEntity, OneToMany } from "typeorm";
+import * as bcrypt from "bcrypt";
+import { Todo } from "../../todos/entities/todo.entity";
 
 @Entity('users')
-export class User {
+export class User extends BaseEntity {
     
     @PrimaryGeneratedColumn()
     id: number;
@@ -18,11 +19,6 @@ export class User {
     })
     email: string;
 
-    @BeforeInsert()
-    hashPassword() {
-      this.password = crypto.createHmac('sha256', this.password).digest('hex');
-    }
-
     @Column()
     password: string;
 
@@ -32,4 +28,12 @@ export class User {
     @UpdateDateColumn()
     updatedAt: Date;
 
+    @BeforeInsert()
+    async setPassword(password: string) {
+      const salt = await bcrypt.genSalt();
+      this.password = await bcrypt.hash(password || this.password, salt);
+    }
+
+    @OneToMany(() => Todo, todo => todo.user)
+    todos: Todo[];
 }

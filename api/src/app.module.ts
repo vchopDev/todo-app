@@ -6,6 +6,7 @@ import { config } from './config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfig } from './databse.config';
 import { UsersModule } from './users/users.module';
+import { TodosModule } from './todos/todos.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { UsersModule } from './users/users.module';
       imports: [ConfigModule],
       useClass: DatabaseConfig
     }),
-    UsersModule
+    UsersModule,
+    TodosModule
   ],
   controllers: [AppController],
   providers: [AppService],

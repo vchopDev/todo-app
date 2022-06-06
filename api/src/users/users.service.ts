@@ -12,8 +12,14 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    createUserDto.createdAt = createUserDto.updatedAt = new Date();
-    return await this.userRepository.save(createUserDto);
+    const user = new User();
+    user.firstName = createUserDto.firstName;
+    user.lastName = createUserDto.lastName;
+    user.email = createUserDto.email;
+    //TODO: validate password against confirmPassword
+    user.password = createUserDto.firstName;
+    user.createdAt = user.updatedAt = new Date();
+    return await user.save();
   }
 
   async findAll() {
@@ -21,7 +27,7 @@ export class UsersService {
   }
 
   async findById(id: number) {
-    return await this.userRepository.find({
+    return await this.userRepository.findOne({
       where: {id: id}
     })
   }
@@ -33,11 +39,14 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    updateUserDto.updatedAt = new Date();
-    await this.userRepository.update({id}, updateUserDto);
-    return await this.userRepository.find({
+    const user = await this.userRepository.findOne({
       where: {id: id}
-    })
+    });
+    user.firstName = updateUserDto.firstName;
+    user.lastName = updateUserDto.lastName;
+    user.email = updateUserDto.email;
+    user.updatedAt = new Date();
+    return await user.save();
   }
 
   async remove(id: number) {

@@ -1,11 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserDto } from './create-user.dto';
-import { IsNotEmpty, Length, Matches } from 'class-validator'
-import { MESSAGES } from '../validation/validation.messages';
-import { RULES } from '../validation/validation.rules';
+import { IsNotEmpty } from 'class-validator'
 
-
-export class UpdateUserDto extends PartialType(CreateUserDto) {
+export class UpdateUserDto {
         
     @IsNotEmpty()
     firstName: string;
@@ -15,20 +10,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
     @IsNotEmpty()
     email: string;
-
-    @IsNotEmpty()
-    @Length(8,24)
-    @Matches(RULES.PASSWORD_RULE, {
-        message: MESSAGES.INVALID_PASSWORD
-    })
-    password: string;
-
-    @IsNotEmpty()
-    @Length(8,24)
-    @Matches(RULES.PASSWORD_RULE, {
-        message: MESSAGES.INVALID_PASSWORD
-    })
-    confirmPassword: string;
 
     updatedAt: Date;
 }
