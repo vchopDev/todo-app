@@ -16,7 +16,7 @@ export class UsersService {
     user.firstName = createUserDto.firstName;
     user.lastName = createUserDto.lastName;
     user.email = createUserDto.email;
-    user.password = createUserDto.firstName;
+    user.password = createUserDto.password;
     user.createdAt = user.updatedAt = new Date();
     return await user.save();
   }

@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BaseEntity, OneToMany } from "typeorm";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { Todo } from "../../todos/entities/todo.entity";
 
 @Entity('users')
@@ -30,7 +30,7 @@ export class User extends BaseEntity {
 
     @BeforeInsert()
     async setPassword(password: string) {
-      const salt = await bcrypt.genSalt();
+      const salt = await bcrypt.genSalt(10);
       this.password = await bcrypt.hash(password || this.password, salt);
     }
 

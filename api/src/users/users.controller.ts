@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SETTINGS } from './validation/validation.pipes';
 import { APIMESSAGES } from './messages/api.messages';
+import { JWTAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(JWTAuthGuard)
   @Post()
   async create(@Body(SETTINGS.VALIDATION_PIPE) createUserDto: CreateUserDto) {
     const result = await this.usersService.create(createUserDto);
@@ -18,6 +20,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JWTAuthGuard)
   @Get()
   async findAll() {
     const result = await this.usersService.findAll();
@@ -27,6 +30,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JWTAuthGuard)
   @Get(':id')
   async findById(@Param('id') id: string) {
     const result = await this.usersService.findById(+id);
@@ -36,6 +40,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JWTAuthGuard)
   @Get(':email')
   async findByEmail(@Param('email') email: string) {
     const result = await this.usersService.findByEmail(email);
@@ -45,8 +50,7 @@ export class UsersController {
     }
   }
 
-  //TODO: update user left a bug if password passed on UpdateUserDto, the password will not be encrypt
-  // need to handle that wrong behaviour
+  @UseGuards(JWTAuthGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const result = await this.usersService.update(+id, updateUserDto);
@@ -56,6 +60,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(JWTAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const result = await this.usersService.remove(+id);

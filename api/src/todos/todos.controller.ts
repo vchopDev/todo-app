@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { APIMESSAGES } from './messages/api.messages';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
+import { JWTAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('todos')
 export class TodosController {
@@ -11,6 +12,7 @@ export class TodosController {
     private readonly todosService: TodosService,
     private readonly userService: UsersService) {}
 
+  @UseGuards(JWTAuthGuard)
   @Post()
   async create(@Body() createTodoDto: CreateTodoDto) {
     const user = await this.userService.findById(createTodoDto.userId);
@@ -27,6 +29,7 @@ export class TodosController {
     }
   }
 
+  @UseGuards(JWTAuthGuard)
   @Get()
   async findAll() {
     const result = await this.todosService.findAll();
@@ -36,6 +39,7 @@ export class TodosController {
     }
   }
 
+  @UseGuards(JWTAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const result = await this.todosService.findOne(+id);
@@ -45,7 +49,7 @@ export class TodosController {
     }
   }
 
-
+  @UseGuards(JWTAuthGuard)
   @Get(':userId')
   async finAllByUserId(@Param('userId') userId: string) {
     const result = await this.todosService.finAllByUserId(+userId);
@@ -55,7 +59,7 @@ export class TodosController {
     }
   }
 
-
+  @UseGuards(JWTAuthGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
     const result = await this.todosService.update(+id, updateTodoDto);
@@ -64,7 +68,8 @@ export class TodosController {
       data: result
     }
   }
-
+  
+  @UseGuards(JWTAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     const result = await this.todosService.remove(+id);

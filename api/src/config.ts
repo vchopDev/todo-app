@@ -12,5 +12,9 @@ export const config = () => ({
             join(__dirname, '**', '*.entity{.ts,.js}')
         ],
         synchronize: true,
+    },
+    api: {
+        JWT_SECRET: process.env.JWT_SECRET,
+        JWT_EXP:process.env.JWT_EXP
     }
 });
